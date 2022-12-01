@@ -1,6 +1,8 @@
-mod lines;
-mod fractal;
+pub mod lines;
+pub mod fractal;
 
 fn main() {
-    println!("based imaging has arrived");
+    lines::plot(
+        lines::line( lines::Co2D::new(-16, -16), lines::Co2D::new(0, 16) )
+    );
 }

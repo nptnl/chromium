@@ -1,6 +1,10 @@
+use std::fs::File;
+use std::io::prelude::*;
+use std::path::Path;
 use ferrum::{ch::Comp, alg::ixp};
 
 static DIM: i16 = 32;
+const INDX: usize = 32;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Co2D {
@@ -23,6 +27,24 @@ impl Co2D {
         let value = Comp::new(self.x as f32, self.y as f32) * ixp(Comp::new(angle, 0.0));
         Co2D { x: (value.r + 0.5) as i16, y: (value.i + 0.5) as i16 }
     }
+}
+#[derive(Debug, Copy, Clone)]
+pub struct Co3D {
+    pub x: i16,
+    pub y: i16,
+    pub z: i16,
+}
+impl Co3D {
+    pub fn new(x: i16, y: i16, z: i16) -> Co3D {
+        Co3D { x, y, z }
+    }
+    pub fn domain(self) -> bool {
+        if self.x > -DIM && self.x < DIM
+        && self.y > -DIM && self.y < DIM
+        && self.z > -DIM && self.z < DIM 
+        { true } else { false }
+    }
+    
 }
 
 fn line_grad(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
@@ -90,5 +112,24 @@ pub fn line(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
         if c1.x < c2.x { return line_grad(c1, c2) } else { return line_grad(c2, c1) }
     } else {
         if c1.y < c2.y { return line_steep(c1, c2) } else { return line_steep(c2, c1) }
+    }
+}
+pub fn plot(colist: Vec<Co2D>) {
+    let path = Path::new("./plots/current.npxl");
+    let mut file = File::create(&path).unwrap();
+    let first = format!("{} {}\n", DIM*2, DIM*2) + "2 1\n";
+    file.write_all(first.as_bytes()).unwrap();
+    let mut outplot: [[u8; 2*INDX]; 2*INDX] = [[0; 2*INDX]; 2*INDX];
+    for co in colist {
+        if co.domain() {
+            outplot[(co.y + DIM) as usize][(co.x + DIM) as usize] = 1;
+        }
+    }
+    for pln in outplot {
+        let mut working: String = String::new();
+        for bol in pln {
+            working += &bol.to_string();
+        }
+        file.write_all(working.as_bytes()).unwrap();
     }
 }

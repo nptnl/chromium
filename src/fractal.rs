@@ -33,7 +33,7 @@ pub fn mandelbrot(size: i32, iterate: usize) {
     let first = format!("{} {}\n", size*2, size*2) + "16 1\n";
     file.write_all(first.as_bytes()).unwrap();
     for imag in -size..size {
-        let mut colorstring = String::from("");
+        let mut colorstring = String::new();
         for real in -size..size {
             let c: Comp = Comp::new(2.0 * real as f32 / size as f32, 2.0 * imag as f32 / size as f32);
             let mut z: Comp = Comp::new(0.0,0.0);
