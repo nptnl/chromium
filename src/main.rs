@@ -1,8 +1,14 @@
-pub mod lines;
+pub mod vertex;
 pub mod fractal;
 
+use vertex::*;
+
 fn main() {
-    lines::plot(
-        lines::line( lines::Co2D::new(-16, -16), lines::Co2D::new(0, 16) )
-    );
+    let square: Wire2D = Wire2D {
+        vtx: vec![ Co2D { x: -16, y: -16 }, Co2D { x: -16, y: 16 }, Co2D { x: 16, y: -16 }, Co2D { x: 16, y: 16 } ],
+        cnx: vec![ (0, 1), (0, 2), (1, 3), (2, 3) ],
+    };
+    plot(
+        square.lines()
+    )
 }

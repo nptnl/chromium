@@ -44,14 +44,18 @@ impl Co3D {
         && self.z > -DIM && self.z < DIM 
         { true } else { false }
     }
-    
+    pub fn project(self, focal: i16) -> Co2D {
+        let px: i16 = ((self.x * focal) as f32 / (self.z + focal) as f32) as i16;
+        let py: i16 = ((self.z * focal) as f32 / (self.z + focal) as f32) as i16;
+        Co2D { x: px, y: py }
+    }
 }
 
 fn line_grad(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
     let slope: f32 = (c2.y - c1.y) as f32 / (c2.x - c1.x) as f32;
     let mut current: Co2D = c1;
     let mut outlist: Vec<Co2D> = Vec::new();
-    let mut error: f32 = 0.5;
+    let mut error: f32 = if c1.y < c2.y {0.5} else {-0.5};
     while current.x != c2.x {
         outlist.push(current);
         current.x += 1;
@@ -71,7 +75,7 @@ fn line_steep(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
     let slope: f32 = (c2.x - c1.x) as f32 / (c2.y - c1.y) as f32;
     let mut current: Co2D = c1.swap();
     let mut outlist: Vec<Co2D> = Vec::new();
-    let mut error: f32 = 0.5;
+    let mut error: f32 = if c1.y < c2.y {0.5} else {-0.5};
     while current.y != c2.y {
         outlist.push(current);
         current.y += 1;
@@ -98,7 +102,7 @@ fn line_horiz(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
 fn line_vert(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
     let mut outlist: Vec<Co2D> = Vec::new();
     for y in c1.y..c2.y {
-        outlist.push(Co2D { x: c1.y, y });
+        outlist.push(Co2D { x: c1.x, y });
     }
     outlist.push(c2);
     outlist
@@ -114,6 +118,27 @@ pub fn line(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
         if c1.y < c2.y { return line_steep(c1, c2) } else { return line_steep(c2, c1) }
     }
 }
+
+pub struct Wire2D {
+    pub vtx: Vec<Co2D>,
+    pub cnx: Vec<(usize, usize)>,
+}
+impl Wire2D {
+    pub fn lines(self) -> Vec<Co2D> {
+        let mut outlist: Vec<Co2D> = Vec::new();
+        for connect in self.cnx {
+            outlist.append( &mut line(self.vtx[connect.0], self.vtx[connect.1]) )
+        }
+        outlist
+    }
+    pub fn rotate(mut self, angle: f32) -> Wire2D {
+        for indx in 0..self.vtx.len() {
+            self.vtx[indx] = self.vtx[indx].rotate(angle);
+        };
+        self
+    }
+}
+
 pub fn plot(colist: Vec<Co2D>) {
     let path = Path::new("./plots/current.npxl");
     let mut file = File::create(&path).unwrap();
