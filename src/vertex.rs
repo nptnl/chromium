@@ -24,7 +24,7 @@ impl Co2D {
         Co2D { x: self.y, y: self.x }
     }
     pub fn rotate(self, angle: f32) -> Co2D {
-        let value = Comp::new(self.x as f32, self.y as f32) * ixp(Comp::new(angle, 0.0));
+        let value: Comp = Comp::new(self.x as f32, self.y as f32) * ixp(Comp::new(angle, 0.0));
         Co2D { x: (value.r + 0.5) as i16, y: (value.i + 0.5) as i16 }
     }
 }
@@ -73,9 +73,9 @@ fn line_grad(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
 }
 fn line_steep(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
     let slope: f32 = (c2.x - c1.x) as f32 / (c2.y - c1.y) as f32;
-    let mut current: Co2D = c1.swap();
+    let mut current: Co2D = c1;
     let mut outlist: Vec<Co2D> = Vec::new();
-    let mut error: f32 = if c1.y < c2.y {0.5} else {-0.5};
+    let mut error: f32 = if c1.x < c2.x {0.5} else {-0.5};
     while current.y != c2.y {
         outlist.push(current);
         current.y += 1;
@@ -85,7 +85,7 @@ fn line_steep(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
             current.x += 1;
         } else if error <= -1.0 {
             error += 1.0;
-            current.y -= 1;
+            current.x -= 1;
         }
     }
     outlist.push(c2);
