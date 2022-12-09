@@ -19,6 +19,10 @@ I like it very much.
 
 - 2D Coordinate type with rotation and reflection
 
+- 3D Coordinate types that rotate about any axis and project to a 2D plane
+
+- 2D and 3D wireframe type that can be used to connect a set of points in a predefined manner
+
 - Writing into a custom image format, [NPXL](./npxl.md), for compact render storage
 
 ---

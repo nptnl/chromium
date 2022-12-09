@@ -46,8 +46,28 @@ impl Co3D {
     }
     pub fn project(self, focal: i16) -> Co2D {
         let px: i16 = ((self.x * focal) as f32 / (self.z + focal) as f32) as i16;
-        let py: i16 = ((self.z * focal) as f32 / (self.z + focal) as f32) as i16;
+        let py: i16 = ((self.y * focal) as f32 / (self.z + focal) as f32) as i16;
         Co2D { x: px, y: py }
+    }
+    pub fn rotate(self, axis: char, angle: f32) -> Co3D {
+        match axis {
+            'x' => {
+                let mut value: Comp = Comp::new(self.y as f32, self.z as f32);
+                value *= ixp(Comp::new(angle, 0.0));
+                Co3D { x: self.x, y: (value.r + 0.5) as i16, z: (value.i + 0.5) as i16 }
+            },
+            'y' => {
+                let mut value: Comp = Comp::new(self.x as f32, self.z as f32);
+                value *= ixp(Comp::new(angle, 0.0));
+                Co3D { x: (value.r + 0.5) as i16, y: self.y, z: (value.i + 0.5) as i16 }
+            }
+            'z' => {
+                let mut value: Comp = Comp::new(self.x as f32, self.y as f32);
+                value *= ixp(Comp::new(angle, 0.0));
+                Co3D { x: (value.r + 0.5) as i16, y: (value.i + 0.5) as i16, z: self.z }
+            }
+            _ => panic!("no no no thats not an x y or z"),
+        }
     }
 }
 
@@ -134,6 +154,29 @@ impl Wire2D {
     pub fn rotate(mut self, angle: f32) -> Wire2D {
         for indx in 0..self.vtx.len() {
             self.vtx[indx] = self.vtx[indx].rotate(angle);
+        };
+        self
+    }
+}
+pub struct Wire3D {
+    pub vtx: Vec<Co3D>,
+    pub cnx: Vec<(usize, usize)>,
+}
+impl Wire3D {
+    pub fn lines(self) -> Vec<Co2D> {
+        let mut outlist: Vec<Co2D> = Vec::new();
+        for connect in self.cnx {
+            outlist.append(&mut line (
+                self.vtx[connect.0].project(DIM*2),
+                self.vtx[connect.1].project(DIM*2),
+            )
+            );
+        }
+        outlist
+    }
+    pub fn rotate(mut self, axis: char, angle: f32) -> Wire3D {
+        for indx in 0..self.vtx.len() {
+            self.vtx[indx] = self.vtx[indx].rotate(axis, angle);
         };
         self
     }
