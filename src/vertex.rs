@@ -139,6 +139,7 @@ pub fn line(c1: Co2D, c2: Co2D) -> Vec<Co2D> {
     }
 }
 
+#[derive(Clone)]
 pub struct Wire2D {
     pub vtx: Vec<Co2D>,
     pub cnx: Vec<(usize, usize)>,
@@ -158,6 +159,7 @@ impl Wire2D {
         self
     }
 }
+#[derive(Clone)]
 pub struct Wire3D {
     pub vtx: Vec<Co3D>,
     pub cnx: Vec<(usize, usize)>,
@@ -182,7 +184,7 @@ impl Wire3D {
     }
 }
 
-pub fn plot(colist: Vec<Co2D>) {
+pub fn plot(colist: &Vec<Co2D>) {
     let path = Path::new("./plots/current.npxl");
     let mut file = File::create(&path).unwrap();
     let first = format!("{} {}\n", DIM*2, DIM*2) + "2 1\n";
@@ -199,5 +201,21 @@ pub fn plot(colist: Vec<Co2D>) {
             working += &bol.to_string();
         }
         file.write_all(working.as_bytes()).unwrap();
+    }
+}
+
+pub fn term_plot(colist: Vec<Co2D>) {
+    let mut outplot: [[char; 4*INDX]; 2*INDX] = [[' '; 4*INDX]; 2*INDX];
+    for co in colist {
+        if co.domain() {
+            outplot[(co.y + DIM) as usize][(co.x + DIM) as usize * 2] = '[';
+            outplot[(co.y + DIM) as usize][(co.x + DIM) as usize * 2 + 1] = ']';
+        }
+    }
+    for pln in outplot {
+        for little in pln {
+            print!("{}", little);
+        }
+        print!("\n");
     }
 }
