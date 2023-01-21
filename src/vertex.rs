@@ -3,8 +3,8 @@ use std::io::prelude::*;
 use std::path::Path;
 use ferrum::{ch::Comp, alg::ixp};
 
-static DIM: i16 = 32;
-const INDX: usize = 32;
+pub static DIM: i16 = 32;
+pub const INDX: usize = 32;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Co2D {
