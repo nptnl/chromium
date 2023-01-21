@@ -7,6 +7,7 @@
 Chromium is a personal Rust project designed to display a few **very cool** visual applications in mathematics using my math library, Ferrum.
 
 The code may be ass, but I like ass.
+
 I like it very much.
 
 **We have:** *(so far)*

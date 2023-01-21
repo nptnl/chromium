@@ -7,4 +7,3 @@ edition = "2021"
 
 [dependencies]
 ferrum = { path = "../ferrum" }
-titanium = { path = "../titanium" }

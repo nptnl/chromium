@@ -204,7 +204,7 @@ pub fn plot(colist: &Vec<Co2D>) {
     }
 }
 
-pub fn term_plot(colist: Vec<Co2D>) {
+pub fn term_plot(colist: &Vec<Co2D>) {
     let mut outplot: [[char; 4*INDX]; 2*INDX] = [[' '; 4*INDX]; 2*INDX];
     for co in colist {
         if co.domain() {
