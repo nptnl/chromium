@@ -21,5 +21,5 @@ fn main() {
     //     ],
     // };
     // vertex::plot(&graph::explicit());
-    graph::cool();
+    vertex::plot(&graph::explicit());
 }

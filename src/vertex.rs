@@ -3,8 +3,8 @@ use std::io::prelude::*;
 use std::path::Path;
 use ferrum::{ch::Comp, alg::ixp};
 
-pub static DIM: i16 = 16;
-pub const INDX: usize = 16;
+pub static DIM: i16 = 1024;
+pub const INDX: usize = 1024;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Co2D {
@@ -189,7 +189,7 @@ pub fn plot(colist: &Vec<Co2D>) {
     let mut file = File::create(&path).unwrap();
     let first = format!("{} {}\n", DIM*2, DIM*2) + "2 1\n";
     file.write_all(first.as_bytes()).unwrap();
-    let mut outplot: [[u8; 2*INDX]; 2*INDX] = [[0; 2*INDX]; 2*INDX];
+    let mut outplot: Vec<[u8; 2*INDX]> = vec![[0; 2*INDX]; 2*INDX];
     for co in colist {
         if co.domain() {
             outplot[(co.y + DIM) as usize][(co.x + DIM) as usize] = 1;
@@ -203,7 +203,6 @@ pub fn plot(colist: &Vec<Co2D>) {
         file.write_all(working.as_bytes()).unwrap();
     }
 }
-
 pub fn term_plot(colist: &Vec<Co2D>) {
     let mut outplot: [[char; 4*INDX]; 2*INDX] = [[' '; 4*INDX]; 2*INDX];
     for co in colist {

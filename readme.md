@@ -24,6 +24,8 @@ I like it very much.
 
 - 2D and 3D wireframe type that can be used to connect a set of points in a predefined manner
 
+- Explicit function graphing with custom window position and size
+
 - Writing into a custom image format, [NPXL](./npxl.md), for compact render storage
 
 ---
