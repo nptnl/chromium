@@ -2,24 +2,8 @@ pub mod vertex;
 pub mod fractal;
 pub mod graph;
 
+use ferrum::ch::Comp;
+
 fn main() {
-    // let square: Wire2D = Wire2D {
-    //     vtx: vec![ Co2D { x: -16, y: -16 }, Co2D { x: 16, y: -16 }, Co2D { x: -16, y: 16 }, Co2D { x: 16, y: 16 } ],
-    //     cnx: vec![ (0, 1), (0, 2), (1, 3), (2, 3) ],
-    // };
-    // let cube: Wire3D = Wire3D {
-    //     vtx: vec![
-    //     Co3D::new(-16, -16, -16), Co3D::new( 16, -16, -16),
-    //     Co3D::new( 16,  16, -16), Co3D::new(-16,  16, -16),
-    //     Co3D::new(-16, -16,  16), Co3D::new( 16, -16,  16),
-    //     Co3D::new( 16,  16,  16), Co3D::new(-16,  16,  16),
-    //     ],
-    //     cnx: vec![
-    //     (0, 1), (1, 2), (2, 3), (3, 0),
-    //     (4, 5), (5, 6), (6, 7), (7, 4),
-    //     (0, 4), (1, 5), (2, 6), (3, 7),
-    //     ],
-    // };
-    // vertex::plot(&graph::explicit());
-    vertex::plot(&graph::explicit());
+    fractal::ispace(Comp::new(0.46, 0.0), 8192, 128);
 }

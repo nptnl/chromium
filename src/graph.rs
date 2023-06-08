@@ -1,10 +1,10 @@
-use crate::vertex::{Co2D, DIM, term_plot};
+use crate::vertex::{Co2D, DIM};
 
 static CENTER: (i16, i16) = (0, 0);
-static STEP: (f32, f32) = (0.008, 0.008);
+static STEP: (f32, f32) = (0.005, 0.005);
 
 pub fn explicit() -> Vec<Co2D> {
-    let y1 = | x: f32 | ferrum::trig::cos(ferrum::ch::Comp::new(x, 0.0)).r;
+    let y1 = | x: f32 | x*x*x*x/24.0 - x*x/2.0 + 1.0;
     let mut covec: Vec<Co2D> = Vec::new();
     let mut y: i16;
     let mut previous: i16;
@@ -25,6 +25,14 @@ pub fn explicit() -> Vec<Co2D> {
         previous = y;
     }
     covec
+}
+pub fn parametric() -> Vec<Co2D> {
+    let x1 = | t: f32 | t - 2.0;
+    let y1 = | t: f32 | t*t + 3.0;
+    let mut covec: Vec<Co2D> = Vec::new();
+    let mut x: i16;
+    let mut y: i16;
+    unimplemented!()
 }
 fn y_round(raw: f32) -> i16 {
     ((raw - CENTER.1 as f32) / STEP.1) as i16
